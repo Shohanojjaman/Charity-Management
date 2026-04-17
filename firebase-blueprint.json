@@ -1,0 +1,91 @@
+{
+  "entities": {
+    "CharityRecord": {
+      "title": "CharityRecord",
+      "description": "A record of a single donation or charity expense.",
+      "type": "object",
+      "properties": {
+        "title": {
+          "type": "string",
+          "description": "The title or purpose of the donation."
+        },
+        "amount": {
+          "type": "number",
+          "description": "The amount donated."
+        },
+        "date": {
+          "type": "string",
+          "format": "date-time",
+          "description": "The date of the donation."
+        },
+        "note": {
+          "type": "string",
+          "description": "Optional note or description."
+        },
+        "userId": {
+          "type": "string",
+          "description": "The UID of the user who created the record."
+        },
+        "verified": {
+          "type": "boolean",
+          "description": "Whether the record is verified or certified."
+        },
+        "recipientId": {
+          "type": "string",
+          "description": "The ID of the recipient organization."
+        },
+        "category": {
+          "type": "string",
+          "description": "The category of the contribution (e.g., Infrastructure, Education, Healthcare)."
+        }
+      },
+      "required": ["title", "amount", "date", "userId", "verified", "recipientId"]
+    },
+    "Target": {
+      "title": "Target",
+      "description": "A fundraising or donation target.",
+      "type": "object",
+      "properties": {
+        "targetAmount": {
+          "type": "number",
+          "description": "The goal amount."
+        },
+        "startDate": {
+          "type": "string",
+          "format": "date-time",
+          "description": "The start date of the target period."
+        },
+        "endDate": {
+          "type": "string",
+          "format": "date-time",
+          "description": "The deadline for the target."
+        },
+        "status": {
+          "type": "string",
+          "enum": ["active", "completed"],
+          "description": "The current status of the target."
+        },
+        "userId": {
+          "type": "string",
+          "description": "The UID of the user who created the target."
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Timestamp of when the target was created."
+        }
+      },
+      "required": ["targetAmount", "startDate", "endDate", "status", "userId"]
+    }
+  },
+  "firestore": {
+    "/charity_records/{recordId}": {
+      "schema": "CharityRecord",
+      "description": "Collection of charity records."
+    },
+    "/targets/{targetId}": {
+      "schema": "Target",
+      "description": "Collection of donation targets."
+    }
+  }
+}

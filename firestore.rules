@@ -1,0 +1,70 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Helper Functions
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+
+    function isValidDateString(dateStr) {
+      return dateStr is string && dateStr.matches("^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}.*Z?$");
+    }
+
+    function isAdmin() {
+      return isAuthenticated() &&
+        (request.auth.token.email == "shohanojjamanemon@gmail.com" && request.auth.token.email_verified == true);
+    }
+
+    function isValidCharityRecord(data) {
+      return data.keys().hasAll(['title', 'amount', 'date', 'userId', 'verified', 'recipientId']) &&
+             data.keys().hasOnly(['title', 'amount', 'date', 'userId', 'note', 'verified', 'recipientId', 'category', 'createdAt']) &&
+             data.title is string && data.title.size() > 0 && data.title.size() <= 100 &&
+             data.amount is number && data.amount > 0 &&
+             isValidDateString(data.date) &&
+             data.userId == request.auth.uid &&
+             data.verified is bool &&
+             data.recipientId is string &&
+             (!('category' in data) || data.category is string) &&
+             (!('note' in data) || (data.note is string && data.note.size() <= 500)) &&
+             (!('createdAt' in data) || data.createdAt is timestamp);
+    }
+
+    function isValidTarget(data) {
+      return data.keys().hasAll(['targetAmount', 'startDate', 'endDate', 'status', 'userId']) &&
+             data.keys().hasOnly(['targetAmount', 'startDate', 'endDate', 'status', 'userId', 'createdAt']) &&
+             data.targetAmount is number && data.targetAmount > 0 &&
+             isValidDateString(data.startDate) &&
+             isValidDateString(data.endDate) &&
+             data.status in ['active', 'completed'] &&
+             data.userId == request.auth.uid &&
+             (!('createdAt' in data) || data.createdAt is timestamp);
+    }
+
+    match /charity_records/{recordId} {
+      allow read: if isOwner(resource.data.userId) || isAdmin();
+      allow create: if isAuthenticated() && isValidCharityRecord(request.resource.data);
+      allow update: if isOwner(resource.data.userId) && isValidCharityRecord(request.resource.data);
+      allow delete: if isOwner(resource.data.userId) || isAdmin();
+    }
+
+    match /targets/{targetId} {
+      allow read: if isOwner(resource.data.userId) || isAdmin();
+      allow create: if isAuthenticated() && isValidTarget(request.resource.data);
+      allow update: if isOwner(resource.data.userId) && isValidTarget(request.resource.data);
+      allow delete: if isOwner(resource.data.userId) || isAdmin();
+    }
+
+    match /users/{userId} {
+      allow read: if isOwner(userId) || isAdmin();
+      allow write: if isOwner(userId) || isAdmin();
+    }
+
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

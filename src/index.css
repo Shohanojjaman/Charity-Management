@@ -1,0 +1,110 @@
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&family=Inter:wght@400;500;600&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-headline: "Manrope", sans-serif;
+  
+  --color-primary: #4955b3;
+  --color-primary-dim: #3c49a7;
+  --color-primary-container: #dfe0ff;
+  --color-on-primary: #f9f6ff;
+  --color-on-primary-container: #3b48a6;
+  
+  --color-secondary: #4958ac;
+  --color-secondary-dim: #3d4c9f;
+  --color-secondary-container: #dee0ff;
+  --color-on-secondary: #faf8ff;
+  --color-on-secondary-container: #3b4a9e;
+  
+  --color-tertiary: #535f78;
+  --color-tertiary-dim: #47536b;
+  --color-tertiary-container: #d1ddfa;
+  --color-on-tertiary: #f8f8ff;
+  --color-on-tertiary-container: #434e66;
+  
+  --color-background: #f8f9fb;
+  --color-on-background: #2a3439;
+  
+  --color-surface: #f8f9fb;
+  --color-on-surface: #2a3439;
+  --color-surface-variant: #d9e4ea;
+  --color-on-surface-variant: #566166;
+  --color-surface-container-lowest: #ffffff;
+  --color-surface-container-low: #f0f4f7;
+  --color-surface-container: #e8eff3;
+  --color-surface-container-high: #e1e9ee;
+  --color-surface-container-highest: #d9e4ea;
+  --color-surface-bright: #f8f9fb;
+  --color-surface-dim: #cfdce3;
+  
+  --color-error: #9e3f4e;
+  --color-error-container: #fce8eb;
+  --color-on-error: #fff7f7;
+  --color-on-error-container: #782232;
+  
+  --color-outline: #717c82;
+  --color-outline-variant: #a9b4b9;
+
+  --radius-sm: 0.25rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --radius-xl: 1rem;
+  --radius-2xl: 1.5rem;
+
+  --shadow-ambient: 0 12px 40px rgba(73, 85, 179, 0.06);
+}
+
+@layer base {
+  body {
+    @apply antialiased transition-colors duration-500;
+    min-height: 100vh;
+    background: linear-gradient(145deg, var(--color-background) 0%, var(--color-primary-container) 100%);
+    background-attachment: fixed;
+  }
+
+  .dark {
+    --color-primary: #b8c0ff;
+    --color-primary-dim: #9aa8ff;
+    --color-primary-container: #2a347e;
+    --color-on-primary: #000a38;
+    --color-background: #0b0c12;
+    --color-on-background: #e1e2e9;
+    --color-surface: #0b0c12;
+    --color-on-surface: #e1e2e9;
+    --color-surface-container-lowest: #07080d;
+    --color-surface-container-low: #12131b;
+    --color-surface-container: #1a1b26;
+    --color-surface-container-high: #232533;
+    --color-surface-container-highest: #2d3041;
+    --color-surface-bright: #1c1d29;
+    --color-surface-dim: #07080d;
+  }
+
+  .dark body {
+    background: linear-gradient(145deg, var(--color-background) 0%, var(--color-primary-container) 100%);
+    color: var(--color-on-surface);
+  }
+}
+
+@layer utilities {
+  .primary-gradient {
+    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dim) 100%);
+  }
+}
+
+.headline-font {
+  font-family: var(--font-headline);
+}
+
+/* Custom scrollbar for hide-scrollbar class */
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
